@@ -1,0 +1,55 @@
+		#chat
+		{
+			height: 500px;
+			overflow: scroll 
+		}
+
+		#chatWrap
+		{
+			width: 500;
+			float:left;
+			border: 1px #000 solid;
+		}
+
+		#contentWrap
+		{
+			display: none;
+		}
+
+		#users
+		{
+			padding: 10px, 10px, 10px, 10px;
+		}
+
+		@font-face
+		{
+			font-family: archristy;
+			src: url('/ARCHRISTY.ttf');
+		}
+
+		h1 
+		{
+			font-family: archristy serif;
+		}
+
+		#send-message
+		{
+			text-align: center;
+		}
+
+		#nickWrap
+		{
+			text-align: center;
+			padding: 50px 50px 50px 50px;
+
+		}
+
+		body
+		{
+			background-color: #009999;
+		}
+
+		#text
+		{
+			color: black;
+		}

@@ -1,0 +1,179 @@
+<html>
+
+<head>
+	<title>Chat!</title>
+	<style type="text/css">
+		#chat
+		{
+			height: 500px;
+			overflow: scroll 
+		}
+
+		#chatWrap
+		{
+			width: 500;
+			float:left;
+			border: 1px #000 solid;
+		}
+
+		#contentWrap
+		{
+			display: none;
+		}
+
+		@font-face
+		{
+			font-family: "ARChristy";
+			src: url("fonts/archristy.ttf");
+		}
+
+		#title 
+		{
+			font-family: "ARChristy", serif;
+			font-size: 50px;
+			text-align: center;
+			-webkit-text-stroke-width: 0.5px;
+  			-webkit-text-stroke-color: white;
+  			background-color: #9575B4;
+		}
+
+		#send-message
+		{
+			text-align: center;
+		}
+
+		#nickWrap
+		{
+			text-align: center;
+		}
+
+		body
+		{
+			background-color: #009999;
+		}
+
+		#text
+		{
+			color: black;
+			font-family: times, serif;
+		}
+
+
+	</style>
+
+</head>
+
+<body>
+
+<div id="text">
+	<div id="title">
+	<img src="node_modules/images/star.png" alt="star">
+	<h1> MKAHQ </h1>
+
+	</div>
+
+	<div id="nickWrap">
+		<p> Enter thy secret name: </p>
+		<p id="nickError"></p>
+		<form id="setNick">
+			<input size ="35" id="nickname"></input>
+			<input type="submit"></input>
+		</form>
+	 </div>
+
+	 <div id="contentWrap">
+		 <div id="chatWrap">
+			<div id="chat"></div>
+			<form id="send-message"> 
+				<input size="35" id ="message"></input>
+				<input type="submit" value="Send"></input>
+			</form>
+		</div>
+
+
+		<div id="users">
+
+		</div>
+
+	</div>
+
+</div>
+
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		jQuery(function($){
+			var socket = io.connect(); //socket functionality
+			// make refrences to the html variables
+			var $nickForm = $('#setNick');
+			var $nickError = $('#nickError');
+			var $nickBox = $('#nickname');
+			var $users = $('#users');
+			var $messageForm = $('#send-message');
+			var $messageBox = $('#message');
+			var $chat = $('#chat');
+			
+			// An event that is called when the nickname form is submitted
+			$nickForm.submit(function(e)
+			{
+				e.preventDefault();
+
+				socket.emit('new user', $nickBox.val(), function(data) // send data from the server to the function. Does something based on if it's unique or not. Is called a "call back"
+				{
+					if(data)
+					{
+						$('#nickWrap').hide();
+						$('#contentWrap').show();
+					} else
+					{
+						$nickError.html('That username was already taken! Try again.');
+					}
+				});
+
+				// Reset the value of the username box
+				$nickBox.val('');
+			});
+
+			// Receive data from the server regarding the nicknames
+			socket.on('usernames', function(data)
+			{
+				var html = '';
+				// go
+				for(i = 0; i < data.length; i++)
+				{
+					html += data[i] + '<br/>'
+				}
+				$users.html(html);
+			});
+
+			//Send an event each time the message form is submitted. ie send the message to the server.
+			$messageForm.submit(function(e)
+			{
+				// To prevent the page from refreshing
+				e.preventDefault();
+
+				// send the message to the server
+				socket.emit('send message', $messageBox.val());
+				// clear the messageBox
+				$messageBox.val('');
+			});
+
+
+			// receive the message from the server. This could be a message you sent or somebody else sent.
+			socket.on('new message', function(data)
+			{
+				// display the message
+				$chat.append('<b>' + data.nick + ': </b>' + data.msg + "<br/>");
+				updateScroll();
+			});
+
+			function updateScroll()
+			{
+				$chat.scrollTop(1000);
+			}
+		});
+	</script>
+
+</body>
+
+</html>
