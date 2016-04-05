@@ -10,8 +10,8 @@
 
 		#chat
 		{
-			height: 460px;
-			overflow: scroll 
+			height: 450px;
+			overflow: scroll;
 		}
 
 		#chatWrap
@@ -19,6 +19,7 @@
 			width: 500;
 			float:left;
 			position: relative;
+			background-color: #67D7E5;
 		}
 
 		.border
@@ -51,6 +52,7 @@
 			-webkit-text-stroke-width: 0.5px;
   			-webkit-text-stroke-color: white;
   			background-color: #9575B4;
+  			border-radius: 10px;
 		}
 
 		.center
@@ -73,8 +75,9 @@
 		{
 			float: left;
 			padding: 5px 10px 10px 10px;
-			margin-left: 10px;
+			margin-left: 5px;
 			font-family: "Andalus";
+			background-color: #67D7E5;
 		}
 
 
@@ -188,7 +191,7 @@
 
 			function updateScroll()
 			{
-				$chat.scrollTop(1000);
+				$chat.scrollTop($chat.scroll());
 			}
 		});
 	</script>
